@@ -11,4 +11,5 @@ import Foundation
 struct PhysicsCategory {
   static let player: UInt32 = 0b1000
   static let ground: UInt32 = 0b0100
+  static let obstacles: UInt32 = 0b0010
 }

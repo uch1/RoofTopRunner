@@ -11,7 +11,7 @@ import SpriteKit
 class Enemy: SKSpriteNode {
 
   init(position: CGPoint, size: CGSize) {
-    super.init(texture: nil, color: .blue, size: size)
+    super.init(texture: nil, color: #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1), size: size)
     self.position = position
     name = "enemy"
 
@@ -20,6 +20,7 @@ class Enemy: SKSpriteNode {
       physicsBody.affectedByGravity = true
       physicsBody.categoryBitMask = PhysicsCategory.player
       physicsBody.collisionBitMask = PhysicsCategory.ground | PhysicsCategory.player
+      physicsBody.usesPreciseCollisionDetection = true
     }
   }
 

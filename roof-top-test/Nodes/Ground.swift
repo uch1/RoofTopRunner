@@ -10,8 +10,9 @@ import SpriteKit
 
 class Ground: SKSpriteNode {
   init(position: CGPoint, size: CGSize) {
-    super.init(texture: nil, color: .white, size: size)
+    super.init(texture: nil, color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), size: size)
     name = "player"
+    
     self.position = position
     physicsBody = SKPhysicsBody(rectangleOf: size)
     if let physicsBody = physicsBody {
