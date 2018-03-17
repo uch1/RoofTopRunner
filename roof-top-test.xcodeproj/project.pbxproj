@@ -10,6 +10,8 @@
 		3D28C256205CF0A20058771E /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D28C255205CF0A20058771E /* Monster.swift */; };
 		3D28C258205CF0F70058771E /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D28C257205CF0F70058771E /* EntityManager.swift */; };
 		3D28C25A205CF1700058771E /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D28C259205CF1700058771E /* SpriteComponent.swift */; };
+		3D28C25C205CF58A0058771E /* MoveBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D28C25B205CF58A0058771E /* MoveBehavior.swift */; };
+		3D28C25E205CF6180058771E /* MoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D28C25D205CF6180058771E /* MoveComponent.swift */; };
 		3D4D46902058765B00747B26 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4D468F2058765B00747B26 /* Enemy.swift */; };
 		3D55FDE6205B7DB70059FC92 /* Obstacle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55FDE5205B7DB70059FC92 /* Obstacle.swift */; };
 		3D55FDEA205BD19E0059FC92 /* Useful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55FDE9205BD19E0059FC92 /* Useful.swift */; };
@@ -30,6 +32,8 @@
 		3D28C255205CF0A20058771E /* Monster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
 		3D28C257205CF0F70058771E /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
 		3D28C259205CF1700058771E /* SpriteComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
+		3D28C25B205CF58A0058771E /* MoveBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveBehavior.swift; sourceTree = "<group>"; };
+		3D28C25D205CF6180058771E /* MoveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveComponent.swift; sourceTree = "<group>"; };
 		3D4D468F2058765B00747B26 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		3D55FDE5205B7DB70059FC92 /* Obstacle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Obstacle.swift; sourceTree = "<group>"; };
 		3D55FDE9205BD19E0059FC92 /* Useful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Useful.swift; sourceTree = "<group>"; };
@@ -72,6 +76,8 @@
 			isa = PBXGroup;
 			children = (
 				3D28C259205CF1700058771E /* SpriteComponent.swift */,
+				3D28C25B205CF58A0058771E /* MoveBehavior.swift */,
+				3D28C25D205CF6180058771E /* MoveComponent.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -212,8 +218,10 @@
 				3D28C256205CF0A20058771E /* Monster.swift in Sources */,
 				3DA7C5CF2051FFA0005C60B9 /* PhysicsCategories.swift in Sources */,
 				3DA7C5BA2051FC9E005C60B9 /* GameViewController.swift in Sources */,
+				3D28C25E205CF6180058771E /* MoveComponent.swift in Sources */,
 				3D28C258205CF0F70058771E /* EntityManager.swift in Sources */,
 				3D55FDEA205BD19E0059FC92 /* Useful.swift in Sources */,
+				3D28C25C205CF58A0058771E /* MoveBehavior.swift in Sources */,
 				3DA7C5CB2051FE71005C60B9 /* Ground.swift in Sources */,
 				3D59A2E3205A60A5006CAB22 /* QuickMaths.swift in Sources */,
 				3DA7C5CD2051FE77005C60B9 /* Player.swift in Sources */,

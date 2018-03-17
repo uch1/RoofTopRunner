@@ -13,6 +13,7 @@ class GameScene: SKScene {
   var ground: Ground!
   var player: Player!
   var enemy: Enemy!
+  var monster: Monster!
   
   // Keeps track of whether or not the player has a finger that's touching the screen.
   var touchDown = false
@@ -28,8 +29,14 @@ class GameScene: SKScene {
   let fallMultiplier: CGFloat = 1.2
   // The multiplier that will be applied to player's gravity to elongate player jump.
   let lowJumpMultiplier: CGFloat = 1.05
+
+  var entityManager: EntityManager!
+
+  var lastUpdateTimeInterval: TimeInterval = 0
   
   override func didMove(to view: SKView) {
+    entityManager = EntityManager(scene: self)
+
     ground = Ground(position: CGPoint(x: size.width / 2, y: 0), size: CGSize(width: size.width * 1000, height: size.height / 4))
     addChild(ground)
     
@@ -38,7 +45,11 @@ class GameScene: SKScene {
     
     enemy = Enemy(position: CGPoint(x: player.position.x - 100, y: size.height / 2), size: CGSize(width: 40, height: 40))
     addChild(enemy)
-    
+
+    // Add castles
+    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height / 2), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
+    entityManager.add(monster)
+
     addGroundObstacles()
     cam = SKCameraNode()
     cam.setScale(3.5)
@@ -60,10 +71,15 @@ class GameScene: SKScene {
   }
   
   override func update(_ currentTime: TimeInterval) {
+    let deltaTime = currentTime - lastUpdateTimeInterval
+    lastUpdateTimeInterval = currentTime
+
     super.update(currentTime)
     // Make sure that the scene has already loaded.
     guard scene != nil else { return }
     guard let cam = cam else { return }
+
+    entityManager.update(deltaTime)
     
     // Get player bodies
     guard let playerPhysicsBody = player.physicsBody else { return }
