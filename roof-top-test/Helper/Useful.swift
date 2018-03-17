@@ -33,3 +33,10 @@ extension float2 {
     self.init(x: Float(point.x), y: Float(point.y))
   }
 }
+
+// MARK: Interpolation
+extension GameScene {
+  func lerp(start: Double, end: Double, percent: Double) -> Double {
+    return start + percent * (end - start)
+  }
+}

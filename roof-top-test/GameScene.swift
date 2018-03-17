@@ -33,7 +33,10 @@ class GameScene: SKScene {
   var entityManager: EntityManager!
 
   var lastUpdateTimeInterval: TimeInterval = 0
-  
+
+  var distanceLabel: SKLabelNode!
+  var restartButton: SKSpriteNode!
+
   override func didMove(to view: SKView) {
     entityManager = EntityManager(scene: self)
 
@@ -47,11 +50,19 @@ class GameScene: SKScene {
     addChild(enemy)
 
     // Add castles
-    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height / 2), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
+    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
     entityManager.add(monster)
 
     addGroundObstacles()
     cam = SKCameraNode()
+    distanceLabel = SKLabelNode()
+    distanceLabel.position = CGPoint(x: 0, y: size.height / 5)
+
+    restartButton = SKSpriteNode(color: #colorLiteral(red: 0.06148975343, green: 0.01091015339, blue: 0.2903404832, alpha: 0.7), size: CGSize(width: 88, height: 44))
+    restartButton.name = "restartButton"
+    restartButton.position = CGPoint(x: -size.width / 2 + restartButton.frame.width, y: size.height / 2 - restartButton.frame.height)
+    cam.addChild(distanceLabel)
+    cam.addChild(restartButton)
     cam.setScale(3.5)
     
     // Setup joystick to control player movement.
@@ -110,9 +121,9 @@ class GameScene: SKScene {
     let enemyShouldJump = !enemyIsNearPlayer && enemyHasStopped && !enemyYVelocityTooFast && enemyHasHitObstacle
     // Calculate forces.
     let angle = atan2(enemyPositionDifferenceToPlayer.y, enemyPositionDifferenceToPlayer.x)
-    let dx: CGFloat = cos(angle) * 350
-    let dy: CGFloat = enemyShouldJump ? 1500 : 0.0
-    let enemyMoveForce = CGVector(dx: dx, dy: dy)
+    let vx: CGFloat = cos(angle) * 350
+    let vy: CGFloat = enemyShouldJump ? 1500 : 0.0
+    let enemyMoveForce = CGVector(dx: vx, dy: vy)
     let enemyStopForce = CGVector(dx: -enemyCurrentVelocity.dx / 10, dy: 0)
     
     if enemyXVelocityTooFast && enemyIsAheadOfPlayer && !enemyIsNearPlayer {
@@ -130,6 +141,7 @@ class GameScene: SKScene {
     
     applyGravityMultipliers(to: playerPhysicsBody)
     applyGravityMultipliers(to: enemyPhysicsBody)
+    distanceLabel.text = "\(Int(enemyPositionDifferenceToPlayer.x / 100))"
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -141,6 +153,16 @@ class GameScene: SKScene {
       playerPhysicsBody.applyImpulse(CGVector(dx: 0, dy: 60))
       isPlayerJumping = true
     }
+    // Get UI node that was touched.
+    let touchedNodes = cam.nodes(at: touchLocation)
+    for node in touchedNodes {
+      if node.name == "restartButton" {
+        let scene = GameScene(size: size)
+        let animation = SKTransition.crossFade(withDuration: 0.5) // ...Add transition if you like
+        view?.presentScene(scene, transition: animation)
+      }
+    }
+
     //    movePlayerStick.position = touchLocation
     touchDown = true
   }
