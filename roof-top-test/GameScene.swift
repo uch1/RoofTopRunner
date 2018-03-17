@@ -91,7 +91,6 @@ class GameScene: SKScene {
     let scaleExpo = CGFloat(0.001 * pow(0.9, -abs(playerPhysicsBody.velocity.dx) / 100  - 1) + 3.16)
     let xOffset = xOffsetExpo.clamped(to: -1000...1500) * (playerPhysicsBody.velocity.dx > 0 ? 1 : -1)
     let scale = scaleExpo.clamped(to: 3...5.5)
-    enemy.setScale(scaleExpo.clamped(to: 4...11) - 3)
     cam.setScale(scale)
     cam.run(SKAction.move(to: CGPoint(x: player.position.x + xOffset, y: player.position.y + (size.height / 2)), duration: duration))
     
@@ -101,21 +100,31 @@ class GameScene: SKScene {
     let enemyCurrentVelocity = enemyPhysicsBody.velocity
     // Check enemy conditions.
     let enemyIsNearPlayer = abs(enemyPositionDifferenceToPlayer.x) < 50
+    let enemyIsAbovePlayer = enemyPositionDifferenceToPlayer.x < 2
+    let enemyIsAheadOfPlayer = playerPhysicsBody.velocity.dx * enemyPositionDifferenceToPlayer.x < 0
     let enemyHasStopped = abs(enemyCurrentVelocity.dx) <= 80
     let enemyHasHitObstacle = abs(enemyCurrentVelocity.dx) - abs(previousEnemyVelocity.dx) < 80
-    let enemyYVelocityIsTooHigh = abs(enemyCurrentVelocity.dy) > 400
-    let enemyXVelocityIsTooHigh = abs(enemyCurrentVelocity.dx) > 900
-    let enemyShouldJump = !enemyIsNearPlayer && enemyHasStopped && !enemyYVelocityIsTooHigh && enemyHasHitObstacle
+    let enemyYVelocityTooFast = abs(enemyCurrentVelocity.dy) > 400
+    let enemyXVelocityTooFast = abs(enemyCurrentVelocity.dx) > 6000
+    let enemyThinksPlayerTooFast = abs(enemyCurrentVelocity.dx) > 6000
+    let enemyShouldJump = !enemyIsNearPlayer && enemyHasStopped && !enemyYVelocityTooFast && enemyHasHitObstacle
     // Calculate forces.
     let angle = atan2(enemyPositionDifferenceToPlayer.y, enemyPositionDifferenceToPlayer.x)
     let dx: CGFloat = cos(angle) * 350
     let dy: CGFloat = enemyShouldJump ? 1500 : 0.0
     let enemyMoveForce = CGVector(dx: dx, dy: dy)
-    let enemyStopForce = CGVector(dx: -enemyCurrentVelocity.dx / 2.5, dy: 0)
+    let enemyStopForce = CGVector(dx: -enemyCurrentVelocity.dx / 10, dy: 0)
     
-    if enemyXVelocityIsTooHigh && enemyIsNearPlayer {
+    if enemyXVelocityTooFast && enemyIsAheadOfPlayer && !enemyIsNearPlayer {
       enemyPhysicsBody.applyForce(enemyStopForce)
     }
+
+    if enemyThinksPlayerTooFast && enemyIsAheadOfPlayer {
+      enemy.run(SKAction.scale(to: 6, duration: 0.2))
+    } else if !enemyIsAheadOfPlayer {
+      enemy.run(SKAction.scale(to: 1, duration: 0.2))
+    }
+
     enemyPhysicsBody.applyForce(enemyMoveForce)
     previousEnemyVelocity = enemyPhysicsBody.velocity
     
@@ -145,7 +154,7 @@ private extension GameScene {
   func addGroundObstacles() {
     makeObstacles(at: player.position, amount: 1000, size: CGSize(width: 50, height: 50), spacing: 1)
     makeObstacles(at: player.position.applying(CGAffineTransform(translationX: 0, y: 50)), amount: 250, size: CGSize(width: 50, height: 120), spacing: 2)
-    makeObstacles(at: player.position.applying(CGAffineTransform(translationX: 3000, y: 100)), amount: 250, size: CGSize(width: 3000, height: 120), spacing: 1.1)
+    makeObstacles(at: player.position.applying(CGAffineTransform(translationX: 3100, y: 100)), amount: 250, size: CGSize(width: 3000, height: 120), spacing: 1.1)
   }
   
   func makeObstacles(at origin: CGPoint, amount: Int, size: CGSize, spacing: CGFloat) {
