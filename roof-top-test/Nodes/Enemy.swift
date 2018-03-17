@@ -9,7 +9,7 @@
 import SpriteKit
 
 class Enemy: SKSpriteNode {
-
+  
   init(position: CGPoint, size: CGSize) {
     super.init(texture: nil, color: #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1), size: size)
     self.position = position
