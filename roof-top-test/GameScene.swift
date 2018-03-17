@@ -13,6 +13,7 @@ class GameScene: SKScene {
   var ground: Ground!
   var player: Player!
   var enemy: Enemy!
+  var dropperEnemy: Enemy!
   var monster: Monster!
   
   // Keeps track of whether or not the player has a finger that's touching the screen.
@@ -39,7 +40,6 @@ class GameScene: SKScene {
 
   override func didMove(to view: SKView) {
     entityManager = EntityManager(scene: self)
-
     ground = Ground(position: CGPoint(x: size.width / 2, y: 0), size: CGSize(width: size.width * 1000, height: size.height / 4))
     addChild(ground)
     
@@ -49,16 +49,33 @@ class GameScene: SKScene {
     enemy = Enemy(position: CGPoint(x: player.position.x - 100, y: size.height / 2), size: CGSize(width: 40, height: 40))
     addChild(enemy)
 
-    // Add castles
-    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
-    entityManager.add(monster)
+    dropperEnemy = Enemy(position: CGPoint(x: player.position.x - 100, y: size.height / 1.5), size: CGSize(width: 40, height: 40))
+    dropperEnemy.color = #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1)
+    dropperEnemy.physicsBody!.isDynamic = false
+    addChild(dropperEnemy)
+
+//    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
+//    entityManager.add(monster)
+
+    let spawnFallingObjects = SKAction.run {
+      let obstacleSize = CGSize(width: 50, height: 50)
+      let obstaclePosition = CGPoint(x: self.dropperEnemy.position.x, y: self.dropperEnemy.position.y - 50)
+      let obstacle = Obstacle(position: obstaclePosition, size: obstacleSize)
+      obstacle.color = #colorLiteral(red: 0.9882352941, green: 0.6314190156, blue: 0, alpha: 1)
+      self.addChild(obstacle)
+
+      let difference = self.positionDifference(from: obstacle, to: self.player)
+      let angle = atan2(difference.y, difference.x)
+      obstacle.physicsBody!.applyImpulse(CGVector(dx: -cos(angle) * 300, dy: sin(angle) * 1000))
+    }
+    run(SKAction.repeatForever(SKAction.sequence([spawnFallingObjects, .wait(forDuration: 1)])))
 
     addGroundObstacles()
     cam = SKCameraNode()
     distanceLabel = SKLabelNode()
     distanceLabel.position = CGPoint(x: 0, y: size.height / 5)
 
-    restartButton = SKSpriteNode(color: #colorLiteral(red: 0.06148975343, green: 0.01091015339, blue: 0.2903404832, alpha: 0.7), size: CGSize(width: 88, height: 44))
+    restartButton = SKSpriteNode(color: #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.5), size: CGSize(width: 88, height: 44))
     restartButton.name = "restartButton"
     restartButton.position = CGPoint(x: -size.width / 2 + restartButton.frame.width, y: size.height / 2 - restartButton.frame.height)
     cam.addChild(distanceLabel)
@@ -68,7 +85,7 @@ class GameScene: SKScene {
     // Setup joystick to control player movement.
     movePlayerStick.position = CGPoint(x: -size.width / 2 + movePlayerStick.radius * 1.5, y: -size.height / 2 + movePlayerStick.radius * 1.5)
     movePlayerStick.stick.color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.7)
-    movePlayerStick.substrate.color = #colorLiteral(red: 0.06148975343, green: 0.01091015339, blue: 0.2903404832, alpha: 0.7)
+    movePlayerStick.substrate.color = #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.5)
     movePlayerStick.trackingHandler = { [unowned self] data in
       //      self.player.physicsBody?.applyImpulse(CGVector(dx: data.velocity.x * 0.1, dy: 0))
       self.player.physicsBody?.applyForce(CGVector(dx: data.velocity.x * 2, dy: 0))
@@ -110,7 +127,7 @@ class GameScene: SKScene {
     // The velocity of the enemy before any action is taken.
     let enemyCurrentVelocity = enemyPhysicsBody.velocity
     // Check enemy conditions.
-    let enemyIsNearPlayer = abs(enemyPositionDifferenceToPlayer.x) < 50
+    let enemyIsNearPlayer = abs(enemyPositionDifferenceToPlayer.x) < 100
     let enemyIsAbovePlayer = enemyPositionDifferenceToPlayer.x < 2
     let enemyIsAheadOfPlayer = playerPhysicsBody.velocity.dx * enemyPositionDifferenceToPlayer.x < 0
     let enemyHasStopped = abs(enemyCurrentVelocity.dx) <= 80
@@ -118,7 +135,7 @@ class GameScene: SKScene {
     let enemyYVelocityTooFast = abs(enemyCurrentVelocity.dy) > 400
     let enemyXVelocityTooFast = abs(enemyCurrentVelocity.dx) > 6000
     let enemyThinksPlayerTooFast = abs(enemyCurrentVelocity.dx) > 6000
-    let enemyShouldJump = !enemyIsNearPlayer && enemyHasStopped && !enemyYVelocityTooFast && enemyHasHitObstacle
+    let enemyShouldJump = enemyHasStopped && !enemyYVelocityTooFast && enemyHasHitObstacle
     // Calculate forces.
     let angle = atan2(enemyPositionDifferenceToPlayer.y, enemyPositionDifferenceToPlayer.x)
     let vx: CGFloat = cos(angle) * 350
@@ -130,12 +147,13 @@ class GameScene: SKScene {
       enemyPhysicsBody.applyForce(enemyStopForce)
     }
 
-    if enemyThinksPlayerTooFast && enemyIsAheadOfPlayer {
+    if enemyThinksPlayerTooFast && enemyIsAheadOfPlayer && !enemyIsNearPlayer{
       enemy.run(SKAction.scale(to: 6, duration: 0.2))
     } else if !enemyIsAheadOfPlayer {
       enemy.run(SKAction.scale(to: 1, duration: 0.2))
     }
 
+    self.dropperEnemy.run(SKAction.move(to: CGPoint(x: self.player.position.x + self.player.physicsBody!.velocity.dx, y: self.player.position.y + 500), duration: 0.8))
     enemyPhysicsBody.applyForce(enemyMoveForce)
     previousEnemyVelocity = enemyPhysicsBody.velocity
     
