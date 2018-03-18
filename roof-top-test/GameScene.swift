@@ -36,7 +36,7 @@ class GameScene: SKScene {
   var lastUpdateTimeInterval: TimeInterval = 0
   var time: Double = 0.0
 
-  var distanceLabel: SKLabelNode!
+  var timeLabel: SKLabelNode!
   var restartButton: SKSpriteNode!
 
   override func didMove(to view: SKView) {
@@ -58,29 +58,45 @@ class GameScene: SKScene {
     //    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
     //    entityManager.add(monster)
 
-    let spawnFallingObjects = SKAction.run { [unowned self] in
-      let obstacleSize = CGSize(width: 50, height: 50)
-      let obstaclePosition = CGPoint(x: self.dropperEnemy.position.x, y: self.dropperEnemy.position.y - 50)
-      let obstacle = Obstacle(position: obstaclePosition, size: obstacleSize)
-      obstacle.color = #colorLiteral(red: 0.9882352941, green: 0.6314190156, blue: 0, alpha: 1)
-      self.addChild(obstacle)
+    let dropObstacle = SKAction.run { [unowned self] in
+      self.dropperEnemy.run(SKAction.scale(to: 2, duration: 0.2))
+      var randWidthModifier = GKRandomSource.sharedRandom().nextInt(upperBound: 100)
+      var randHeightModifier = GKRandomSource.sharedRandom().nextInt(upperBound: 20)
+      var randVelocityModifier = CGFloat(GKRandomSource.sharedRandom().nextUniform()) + 1
 
+      let isSuperBlock = randWidthModifier == 100 && randHeightModifier == 20
+      if isSuperBlock {
+        randWidthModifier *= 5
+      }
+      
+
+      let obstacleSize = CGSize(width: 100 + randWidthModifier, height: 100 + randHeightModifier)
+      let obstaclePosition = CGPoint(x: self.dropperEnemy.position.x, y: self.dropperEnemy.position.y - obstacleSize.height)
+      
+      let obstacle = Obstacle(position: obstaclePosition, size: obstacleSize)
+      obstacle.color = #colorLiteral(red: 0.8765190972, green: 0.5600395258, blue: 0, alpha: 1)
+      self.addChild(obstacle)
+      
       let difference = self.positionDifference(from: obstacle, to: self.player)
       let angle = atan2(difference.y, difference.x)
       obstacle.physicsBody!.usesPreciseCollisionDetection = true
-      obstacle.physicsBody!.applyImpulse(CGVector(dx: -cos(angle) * 300, dy: sin(angle) * 1000))
+      obstacle.physicsBody!.mass = 0.2
+      obstacle.physicsBody!.applyImpulse(CGVector(dx: -cos(angle) * (300 * randVelocityModifier), dy: sin(angle) * (1000 * randVelocityModifier)))
     }
-    run(SKAction.repeatForever(SKAction.sequence([spawnFallingObjects, .wait(forDuration: 1)])))
+    let shrinkAfterDrop = SKAction.run { [unowned self] in
+      self.dropperEnemy.run(SKAction.scale(to: 1, duration: 0.2))
+    }
+    run(SKAction.repeatForever(SKAction.sequence([dropObstacle, shrinkAfterDrop, .wait(forDuration: 2)])))
 
     addGroundObstacles()
     cam = SKCameraNode()
-    distanceLabel = SKLabelNode()
-    distanceLabel.position = CGPoint(x: 0, y: size.height / 5)
+    timeLabel = SKLabelNode()
+    timeLabel.position = CGPoint(x: 0, y: size.height / 5)
 
     restartButton = SKSpriteNode(color: #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.5), size: CGSize(width: 88, height: 44))
     restartButton.name = "restartButton"
     restartButton.position = CGPoint(x: -size.width / 2 + restartButton.frame.width, y: size.height / 2 - restartButton.frame.height)
-    cam.addChild(distanceLabel)
+    cam.addChild(timeLabel)
     cam.addChild(restartButton)
     cam.setScale(3.5)
     
@@ -98,10 +114,9 @@ class GameScene: SKScene {
     self.camera = cam
     
     addChild(cam!)
-    SKAction.sequence([spawnFallingObjects, .wait(forDuration: 1)])
     let timeAction = SKAction.run { [unowned self] in
-      self.time += 0.01
-      self.distanceLabel.text = String(format: "%.2f", self.time)
+      self.time += Double(self.physicsWorld.speed / 10)
+      self.timeLabel.text = String(format: "%.2f", self.time)
     }
 
     run(SKAction.repeatForever(SKAction.sequence([timeAction, .wait(forDuration: 0.01)])))
@@ -184,7 +199,7 @@ class GameScene: SKScene {
     for node in touchedNodes {
       if node.name == "restartButton" {
         let scene = GameScene(size: size)
-        let animation = SKTransition.crossFade(withDuration: 0.5) // ...Add transition if you like
+        let animation = SKTransition.crossFade(withDuration: 0.5)
         view?.presentScene(scene, transition: animation)
       }
     }
@@ -199,6 +214,14 @@ class GameScene: SKScene {
 }
 
 private extension GameScene {
+  func createBackground() {
+    for i in 0...1000 {
+      let node = SKSpriteNode(color: #colorLiteral(red: 0.8276178896, green: 0.4138089448, blue: 0, alpha: 1), size: CGSize(width: size.width * 0.9, height: size.height * 0.95))
+      node.position = CGPoint(x: CGFloat(i) * node.frame.width + 50, y: node.frame.height)
+      addChild(node)
+    }
+  }
+
   func addGroundObstacles() {
     makeObstacles(at: player.position, amount: 1000, size: CGSize(width: 50, height: 50), spacing: 1)
     makeObstacles(at: player.position.applying(CGAffineTransform(translationX: 0, y: 50)), amount: 250, size: CGSize(width: 50, height: 120), spacing: 2)
