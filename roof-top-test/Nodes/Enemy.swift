@@ -12,6 +12,8 @@ import SpriteKit
 class Enemy: SKSpriteNode {
   /// How fast the enemy was moving on the last update.
   var previousVelocity: CGVector = .zero
+  /// How far the enemy can see.
+  var viewDistance: CGSize = CGSize(width: 100, height: 0)
   
   init(position: CGPoint, size: CGSize) {
     super.init(texture: nil, color: #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1), size: size)
@@ -32,7 +34,9 @@ class Enemy: SKSpriteNode {
   }
 
   /// Update state.
-  func update(_ player: Player) {
+  func update(_ scene: GameScene) {
+    // Grab player.
+    guard let player = scene.player else { return }
     // Grab physics bodies.
     guard let physicsBody = physicsBody else { return }
     guard let playerPhysicsBody = player.physicsBody else { return }
@@ -47,14 +51,15 @@ class Enemy: SKSpriteNode {
     let isAbovePlayer = positionDifferenceToPlayer.x < 2
     let isAheadOfPlayer = playerPhysicsBody.velocity.dx * positionDifferenceToPlayer.x < 0
     // Analyze environment.
-    let isObstacleAhead = nodes(at: CGPoint())
+    let obstaclesAhead = scene.nodes(at: CGPoint(x: position.x + frame.width + viewDistance.width, y: position.y + viewDistance.height))
+    let isObstacleAhead = obstaclesAhead.first != nil
     // Analyze self.
     let hasStopped = abs(currentVelocity.dx) <= 80
     let hasHitObstacle = abs(currentVelocity.dx) - abs(previousVelocity.dx) < 80
-    let yVelocityIsTooFast = abs(currentVelocity.dy) > 400
+    let yVelocityIsTooFast = abs(currentVelocity.dy) > 300
     let xVelocityIsTooFast = abs(currentVelocity.dx) > 6000
-    let thinksPlayerTooFast = abs(currentVelocity.dx) > 6000
-    let shouldJump = hasStopped && !yVelocityIsTooFast && hasHitObstacle
+    let thinksPlayerTooFast = abs(currentVelocity.dx) > 5000
+    let shouldJump = !yVelocityIsTooFast && ((hasStopped && hasHitObstacle) || isObstacleAhead)
 
     // Calculate forces to apply.
     let angle = atan2(positionDifferenceToPlayer.y, positionDifferenceToPlayer.x)

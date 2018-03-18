@@ -54,9 +54,6 @@ class GameScene: SKScene {
     dropperEnemy.color = #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1)
     dropperEnemy.physicsBody!.isDynamic = false
     addChild(dropperEnemy)
-
-    enemy.update(player)
-
     //    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
     //    entityManager.add(monster)
 
@@ -134,7 +131,9 @@ class GameScene: SKScene {
     guard let cam = cam else { return }
 
     entityManager.update(deltaTime)
-    
+
+    enemy.update(self)
+
     // Get player bodies
     guard let playerPhysicsBody = player.physicsBody else { return }
     guard let enemyPhysicsBody = enemy.physicsBody else { return }
