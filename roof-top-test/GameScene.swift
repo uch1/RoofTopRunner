@@ -24,7 +24,7 @@ class GameScene: SKScene {
   var previousEnemyVelocity: CGVector = .zero
   
   /// On screen control to move player.
-  let movePlayerStick = AnalogJoystick(diameters: (125, 75))
+  let movePlayerStick = AnalogJoystick(diameters: (135, 100))
   
   // The multiplier that will be applied to player's gravity to create "heaviness".
   let fallMultiplier: CGFloat = 1.2
@@ -100,9 +100,9 @@ class GameScene: SKScene {
     cam.setScale(3.5)
     
     // Setup joystick to control player movement.
-    movePlayerStick.position = CGPoint(x: -size.width / 2 + movePlayerStick.radius * 1.5, y: -size.height / 2 + movePlayerStick.radius * 1.5)
-    movePlayerStick.stick.color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.7)
-    movePlayerStick.substrate.color = #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.5)
+    movePlayerStick.position = CGPoint(x: -size.width / 2 + movePlayerStick.radius * 1.6, y: -size.height / 2 + movePlayerStick.radius * 1.5)
+    movePlayerStick.stick.color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.5)
+    movePlayerStick.substrate.color = #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.3)
     movePlayerStick.trackingHandler = { [unowned self] data in
       //      self.player.physicsBody?.applyImpulse(CGVector(dx: data.velocity.x * 0.1, dy: 0))
       self.player.physicsBody?.applyForce(CGVector(dx: data.velocity.x * 2, dy: 0))
