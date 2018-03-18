@@ -34,6 +34,7 @@ class GameScene: SKScene {
   var entityManager: EntityManager!
 
   var lastUpdateTimeInterval: TimeInterval = 0
+  var time: Double = 0.0
 
   var distanceLabel: SKLabelNode!
   var restartButton: SKSpriteNode!
@@ -54,10 +55,10 @@ class GameScene: SKScene {
     dropperEnemy.physicsBody!.isDynamic = false
     addChild(dropperEnemy)
 
-//    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
-//    entityManager.add(monster)
+    //    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
+    //    entityManager.add(monster)
 
-    let spawnFallingObjects = SKAction.run {
+    let spawnFallingObjects = SKAction.run { [unowned self] in
       let obstacleSize = CGSize(width: 50, height: 50)
       let obstaclePosition = CGPoint(x: self.dropperEnemy.position.x, y: self.dropperEnemy.position.y - 50)
       let obstacle = Obstacle(position: obstaclePosition, size: obstacleSize)
@@ -96,6 +97,13 @@ class GameScene: SKScene {
     self.camera = cam
     
     addChild(cam!)
+    SKAction.sequence([spawnFallingObjects, .wait(forDuration: 1)])
+    let timeAction = SKAction.run { [unowned self] in
+      self.time += 0.01
+      self.distanceLabel.text = String(format: "%.2f", self.time)
+    }
+
+    run(SKAction.repeatForever(SKAction.sequence([timeAction, .wait(forDuration: 0.01)])))
   }
   
   override func update(_ currentTime: TimeInterval) {
@@ -159,7 +167,6 @@ class GameScene: SKScene {
     
     applyGravityMultipliers(to: playerPhysicsBody)
     applyGravityMultipliers(to: enemyPhysicsBody)
-    distanceLabel.text = "\(Int(enemyPositionDifferenceToPlayer.x / 100))"
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
