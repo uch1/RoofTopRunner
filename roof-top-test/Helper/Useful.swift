@@ -35,8 +35,10 @@ extension float2 {
 }
 
 // MARK: Interpolation
-extension GameScene {
-  func lerp(start: Double, end: Double, percent: Double) -> Double {
-    return start + percent * (end - start)
+struct Useful {
+  static func differenceBetween(_ node: SKNode, and: SKNode) -> CGPoint {
+    let dx = and.position.x - node.position.x
+    let dy = and.position.y - node.position.y
+    return CGPoint(x: dx, y: dy)
   }
 }

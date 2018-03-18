@@ -59,7 +59,7 @@ class GameScene: SKScene {
     //    entityManager.add(monster)
 
     let dropObstacle = SKAction.run { [unowned self] in
-      self.dropperEnemy.run(SKAction.scale(to: 2, duration: 0.2))
+      self.dropperEnemy.run(SKAction.scale(and: 2, duration: 0.2))
       var randWidthModifier = GKRandomSource.sharedRandom().nextInt(upperBound: 100)
       var randHeightModifier = GKRandomSource.sharedRandom().nextInt(upperBound: 20)
       var randVelocityModifier = CGFloat(GKRandomSource.sharedRandom().nextUniform()) + 1
@@ -77,14 +77,14 @@ class GameScene: SKScene {
       obstacle.color = #colorLiteral(red: 0.8765190972, green: 0.5600395258, blue: 0, alpha: 1)
       self.addChild(obstacle)
       
-      let difference = self.positionDifference(from: obstacle, to: self.player)
+      let difference = Useful.differenceBetween(obstacle, and: self.player)
       let angle = atan2(difference.y, difference.x)
       obstacle.physicsBody!.usesPreciseCollisionDetection = true
       obstacle.physicsBody!.mass = 0.2
       obstacle.physicsBody!.applyImpulse(CGVector(dx: -cos(angle) * (300 * randVelocityModifier), dy: sin(angle) * (1000 * randVelocityModifier)))
     }
     let shrinkAfterDrop = SKAction.run { [unowned self] in
-      self.dropperEnemy.run(SKAction.scale(to: 1, duration: 0.2))
+      self.dropperEnemy.run(SKAction.scale(and: 1, duration: 0.2))
     }
     run(SKAction.repeatForever(SKAction.sequence([dropObstacle, shrinkAfterDrop, .wait(forDuration: 2)])))
 
@@ -141,13 +141,13 @@ class GameScene: SKScene {
     let duration = TimeInterval(0.4 * pow(0.9, abs(playerPhysicsBody.velocity.dx / 100) - 1) + 0.05)
     let xOffsetExpo = CGFloat(0.4 * pow(0.9, -abs(playerPhysicsBody.velocity.dx) / 100 - 1) - 0.04)
     let scaleExpo = CGFloat(0.001 * pow(0.9, -abs(playerPhysicsBody.velocity.dx) / 100  - 1) + 3.16)
-    let xOffset = xOffsetExpo.clamped(to: -1000...1500) * (playerPhysicsBody.velocity.dx > 0 ? 1 : -1)
-    let scale = scaleExpo.clamped(to: 3...5.5)
+    let xOffset = xOffsetExpo.clamped(and: -1000...1500) * (playerPhysicsBody.velocity.dx > 0 ? 1 : -1)
+    let scale = scaleExpo.clamped(and: 3...5.5)
     cam.setScale(scale)
-    cam.run(SKAction.move(to: CGPoint(x: player.position.x + xOffset, y: player.position.y + (size.height / 2)), duration: duration))
+    cam.run(SKAction.move(and: CGPoint(x: player.position.x + xOffset, y: player.position.y + (size.height / 2)), duration: duration))
     
     // Distance between the enemy and the player as CGPoint.
-    let enemyPositionDifferenceToPlayer = positionDifference(from: enemy, to: player)
+    let enemyPositionDifferenceToPlayer = Useful.differenceBetween(enemy, and: player)
     // The velocity of the enemy before any action is taken.
     let enemyCurrentVelocity = enemyPhysicsBody.velocity
     // Check enemy conditions.
@@ -159,6 +159,7 @@ class GameScene: SKScene {
     let enemyYVelocityTooFast = abs(enemyCurrentVelocity.dy) > 400
     let enemyXVelocityTooFast = abs(enemyCurrentVelocity.dx) > 6000
     let enemyThinksPlayerTooFast = abs(enemyCurrentVelocity.dx) > 6000
+    let obstacleAheadOfEnemy = nodes(at: CGPoint())
     let enemyShouldJump = enemyHasStopped && !enemyYVelocityTooFast && enemyHasHitObstacle
     // Calculate forces.
     let angle = atan2(enemyPositionDifferenceToPlayer.y, enemyPositionDifferenceToPlayer.x)
@@ -172,17 +173,17 @@ class GameScene: SKScene {
     }
 
     if enemyThinksPlayerTooFast && enemyIsAheadOfPlayer && !enemyIsNearPlayer{
-      enemy.run(SKAction.scale(to: 6, duration: 0.2))
+      enemy.run(SKAction.scale(and: 6, duration: 0.2))
     } else if !enemyIsAheadOfPlayer {
-      enemy.run(SKAction.scale(to: 1, duration: 0.2))
+      enemy.run(SKAction.scale(and: 1, duration: 0.2))
     }
 
-    self.dropperEnemy.run(SKAction.move(to: CGPoint(x: self.player.position.x + self.player.physicsBody!.velocity.dx, y: self.player.position.y + 500), duration: 0.8))
+    self.dropperEnemy.run(SKAction.move(and: CGPoint(x: self.player.position.x + self.player.physicsBody!.velocity.dx, y: self.player.position.y + 500), duration: 0.8))
     enemyPhysicsBody.applyForce(enemyMoveForce)
     previousEnemyVelocity = enemyPhysicsBody.velocity
     
-    applyGravityMultipliers(to: playerPhysicsBody)
-    applyGravityMultipliers(to: enemyPhysicsBody)
+    applyGravityMultipliers(and: playerPhysicsBody)
+    applyGravityMultipliers(and: enemyPhysicsBody)
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -236,12 +237,6 @@ private extension GameScene {
       let obstacle = Obstacle(position: obstaclePosition, size: obstacleSize)
       addChild(obstacle)
     }
-  }
-  
-  func positionDifference(from: SKNode, to: SKNode) -> CGPoint {
-    let dx = to.position.x - from.position.x
-    let dy = to.position.y - from.position.y
-    return CGPoint(x: dx, y: dy)
   }
   
   func applyGravityMultipliers(to physicsBody: SKPhysicsBody) {
