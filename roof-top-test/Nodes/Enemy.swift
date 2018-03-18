@@ -68,7 +68,7 @@ class Enemy: SKSpriteNode {
       physicsBody.applyForce(stopForce)
     }
     // Move towards player.
-    enemyPhysicsBody.applyForce(moveForce)
+    physicsBody.applyForce(moveForce)
 
     // Capture player if the position to.
     if thinksPlayerTooFast && isAheadOfPlayer && !isNearPlayer {
