@@ -67,6 +67,7 @@ class GameScene: SKScene {
 
       let difference = self.positionDifference(from: obstacle, to: self.player)
       let angle = atan2(difference.y, difference.x)
+      obstacle.physicsBody!.usesPreciseCollisionDetection = true
       obstacle.physicsBody!.applyImpulse(CGVector(dx: -cos(angle) * 300, dy: sin(angle) * 1000))
     }
     run(SKAction.repeatForever(SKAction.sequence([spawnFallingObjects, .wait(forDuration: 1)])))
