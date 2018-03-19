@@ -67,7 +67,6 @@ class GameScene: SKScene {
       if isSuperBlock {
         randWidthModifier *= 5
       }
-      
 
       let obstacleSize = CGSize(width: 100 + randWidthModifier, height: 100 + randHeightModifier)
       let obstaclePosition = CGPoint(x: self.dropperEnemy.position.x, y: self.dropperEnemy.position.y - obstacleSize.height)
@@ -89,7 +88,7 @@ class GameScene: SKScene {
 
     addGroundObstacles()
     cam = SKCameraNode()
-    timeLabel = SKLabelNode()
+    timeLabel = SKLabelNode(fontNamed: "Courier")
     timeLabel.position = CGPoint(x: 0, y: size.height / 5)
 
     restartButton = SKSpriteNode(color: #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.5), size: CGSize(width: 88, height: 44))
@@ -114,7 +113,7 @@ class GameScene: SKScene {
     
     addChild(cam!)
     let timeAction = SKAction.run { [unowned self] in
-      self.time += Double(self.physicsWorld.speed / 10)
+      self.time += Double(self.physicsWorld.speed / 100)
       self.timeLabel.text = String(format: "%.2f", self.time)
     }
 
@@ -137,7 +136,7 @@ class GameScene: SKScene {
     // Get player bodies
     guard let playerPhysicsBody = player.physicsBody else { return }
     guard let enemyPhysicsBody = enemy.physicsBody else { return }
-    
+
     // Move cam to player
     let duration = TimeInterval(0.4 * pow(0.9, abs(playerPhysicsBody.velocity.dx / 100) - 1) + 0.05)
     let xOffsetExpo = CGFloat(0.4 * pow(0.9, -abs(playerPhysicsBody.velocity.dx) / 100 - 1) - 0.04)
@@ -160,9 +159,11 @@ class GameScene: SKScene {
     
     if touchLocation.x > cam.frame.width / 2 && !isPlayerJumping {
       guard let playerPhysicsBody = player.physicsBody else { return }
+
       playerPhysicsBody.applyImpulse(CGVector(dx: 0, dy: 60))
       isPlayerJumping = true
     }
+
     // Get UI node that was touched.
     let touchedNodes = cam.nodes(at: touchLocation)
     for node in touchedNodes {
