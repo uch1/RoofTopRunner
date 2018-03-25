@@ -12,6 +12,7 @@
 		3D28C25A205CF1700058771E /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D28C259205CF1700058771E /* SpriteComponent.swift */; };
 		3D28C25C205CF58A0058771E /* MoveBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D28C25B205CF58A0058771E /* MoveBehavior.swift */; };
 		3D28C25E205CF6180058771E /* MoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D28C25D205CF6180058771E /* MoveComponent.swift */; };
+		3D36AA2E2063944A0004A9DF /* EnemyLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D36AA2D2063944A0004A9DF /* EnemyLogic.swift */; };
 		3D4D46902058765B00747B26 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4D468F2058765B00747B26 /* Enemy.swift */; };
 		3D55FDE6205B7DB70059FC92 /* Obstacle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55FDE5205B7DB70059FC92 /* Obstacle.swift */; };
 		3D55FDEA205BD19E0059FC92 /* Useful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55FDE9205BD19E0059FC92 /* Useful.swift */; };
@@ -26,6 +27,7 @@
 		3DA7C5CD2051FE77005C60B9 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA7C5CC2051FE77005C60B9 /* Player.swift */; };
 		3DA7C5CF2051FFA0005C60B9 /* PhysicsCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA7C5CE2051FFA0005C60B9 /* PhysicsCategories.swift */; };
 		3DEBB396205B02010017C9BB /* AnalogJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEBB395205B02010017C9BB /* AnalogJoystick.swift */; };
+		3DEDC91C2063549E0076364E /* CGVector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEDC91B2063549E0076364E /* CGVector+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,7 @@
 		3D28C259205CF1700058771E /* SpriteComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
 		3D28C25B205CF58A0058771E /* MoveBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveBehavior.swift; sourceTree = "<group>"; };
 		3D28C25D205CF6180058771E /* MoveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveComponent.swift; sourceTree = "<group>"; };
+		3D36AA2D2063944A0004A9DF /* EnemyLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyLogic.swift; sourceTree = "<group>"; };
 		3D4D468F2058765B00747B26 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		3D55FDE5205B7DB70059FC92 /* Obstacle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Obstacle.swift; sourceTree = "<group>"; };
 		3D55FDE9205BD19E0059FC92 /* Useful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Useful.swift; sourceTree = "<group>"; };
@@ -50,6 +53,7 @@
 		3DA7C5CC2051FE77005C60B9 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		3DA7C5CE2051FFA0005C60B9 /* PhysicsCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategories.swift; sourceTree = "<group>"; };
 		3DEBB395205B02010017C9BB /* AnalogJoystick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalogJoystick.swift; sourceTree = "<group>"; };
+		3DEDC91B2063549E0076364E /* CGVector+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGVector+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +92,7 @@
 				3DEBB395205B02010017C9BB /* AnalogJoystick.swift */,
 				3D55FDE9205BD19E0059FC92 /* Useful.swift */,
 				3D59A2E2205A60A5006CAB22 /* QuickMaths.swift */,
+				3D36AA2D2063944A0004A9DF /* EnemyLogic.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -111,6 +116,7 @@
 		3DA7C5B02051FC9E005C60B9 /* roof-top-test */ = {
 			isa = PBXGroup;
 			children = (
+				3DEDC91A2063548A0076364E /* Extensions */,
 				3DA7C5C92051FE64005C60B9 /* Nodes */,
 				3D28C254205CF0540058771E /* Components */,
 				3D28C253205CF04B0058771E /* Entities */,
@@ -136,6 +142,14 @@
 				3D55FDE5205B7DB70059FC92 /* Obstacle.swift */,
 			);
 			path = Nodes;
+			sourceTree = "<group>";
+		};
+		3DEDC91A2063548A0076364E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3DEDC91B2063549E0076364E /* CGVector+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,8 +227,10 @@
 				3D4D46902058765B00747B26 /* Enemy.swift in Sources */,
 				3DEBB396205B02010017C9BB /* AnalogJoystick.swift in Sources */,
 				3D28C25A205CF1700058771E /* SpriteComponent.swift in Sources */,
+				3D36AA2E2063944A0004A9DF /* EnemyLogic.swift in Sources */,
 				3D55FDE6205B7DB70059FC92 /* Obstacle.swift in Sources */,
 				3DA7C5B82051FC9E005C60B9 /* GameScene.swift in Sources */,
+				3DEDC91C2063549E0076364E /* CGVector+Extensions.swift in Sources */,
 				3D28C256205CF0A20058771E /* Monster.swift in Sources */,
 				3DA7C5CF2051FFA0005C60B9 /* PhysicsCategories.swift in Sources */,
 				3DA7C5BA2051FC9E005C60B9 /* GameViewController.swift in Sources */,
