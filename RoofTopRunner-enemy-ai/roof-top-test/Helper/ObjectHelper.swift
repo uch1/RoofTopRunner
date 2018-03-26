@@ -12,7 +12,7 @@ class ObjectHelper {
     
     static func handleChild(sprite: SKSpriteNode, with name: String) {
         switch name {
-        case GameConstants.StringConstants.enemyName:
+        case GameConstant.StringConstant.enemyName:
             PhysicsHelper.addPhysicsBody(to: sprite, with: name)
         default:
             let components = name.components(separatedBy: NSCharacterSet.decimalDigits.inverted)
@@ -35,7 +35,7 @@ class ObjectHelper {
         let coinWidth = parent.size.width/CGFloat(columns)
         let coinHeight = coinWidth
         let coin = SKSpriteNode(color: .yellow, size: .init(width: coinWidth, height: coinHeight))
-        coin.name = GameConstants.StringConstants.coinName
+        coin.name = GameConstant.StringConstant.coinName
         
         parent.color = UIColor.clear
         
@@ -43,7 +43,7 @@ class ObjectHelper {
         let coinYPosition = position.y * coin.size.height + coin.size.height/2
         coin.position = CGPoint(x: coinXPosition, y: coinYPosition)
         
-        PhysicsHelper.addPhysicsBody(to: coin, with: GameConstants.StringConstants.coinName)
+        PhysicsHelper.addPhysicsBody(to: coin, with: GameConstant.StringConstant.coinName)
         
         parent.addChild(coin)
     }

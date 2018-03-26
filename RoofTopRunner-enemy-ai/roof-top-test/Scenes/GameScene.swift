@@ -9,6 +9,11 @@
 import SpriteKit
 import GameplayKit
 
+/* Tracking enum for game state */
+enum GameState {
+    case title, ready, playing, gameOver
+}
+
 class GameScene: SKScene {
     var ground: Ground!
     var player: Player!
@@ -43,39 +48,139 @@ class GameScene: SKScene {
     var timeLabel: SKLabelNode!
     var restartButton: SKSpriteNode!
     var restartButtonLabel: SKLabelNode!
+    var coinCollectionLabel: SKLabelNode!
+    var healthBar: SKSpriteNode!
+    
+    var health: CGFloat = 1.0 {
+        didSet {
+            /* Cap health */
+            if health > 1.0 { health = 1.0}
+            /* Scale health bar between 0.0 -> 1.0 e.g 0 -> 100% */
+            healthBar.xScale = health
+        }
+    }
+    
+    var coinsCollected: Int = 0 {
+        didSet {
+            coinCollectionLabel.text = "Coins: \(coinsCollected)"
+        }
+    }
     
     
-    // Size of node
-    let coinSize = CGSize(width: 20, height: 20)
+//    // Size of node
+//    let coinSize = CGSize(width: 20, height: 20)
     
     override func didMove(to view: SKView) {
         
+        physicsWorld.contactDelegate = self
+        
+        cam = SKCameraNode()
+        cam.setScale(3.5)
+        
+        self.camera = cam
+        addChild(cam!)
+        
+        startMakingCoins()
+        setupGameLabels()
+        setupGround()
+        setupPlayer()
+        addGroundObstacles()
+        setupEnemy()
+        setupDropperEnemy()
+        setupJoystickControl()
+        
         entityManager = EntityManager(scene: self)
-        ground = Ground(position: CGPoint(x: size.width / 2, y: 0), size: CGSize(width: size.width * 1000, height: size.height / 4))
-        addChild(ground)
         
-        player = Player(position: CGPoint(x: size.width / 2, y: size.height / 2), size: CGSize(width: 40, height: 40))
-        addChild(player)
+//        ground = Ground(position: CGPoint(x: size.width / 2, y: 0), size: CGSize(width: size.width * 1000, height: size.height / 4))
+//        addChild(ground)
         
-        enemy = Enemy(position: CGPoint(x: player.position.x - 100, y: size.height / 2), size: CGSize(width: 40, height: 40))
-        addChild(enemy)
+//        let playerHeight: CGFloat = 100
+//        player = Player(position: CGPoint(x: size.width / 2, y: size.height / 2), size: CGSize(width: playerHeight/2.0, height: playerHeight))
+//        addChild(player)
+        
+//        enemy = Enemy(position: CGPoint(x: player.position.x - 100, y: size.height / 2), size: CGSize(width: 40, height: 80))
+//        addChild(enemy)
         
 //        coin = Coin()
 //        coin.position = CGPoint(x: 250, y: 300)
 //        addChild(<#T##node: SKNode##SKNode#>)
         
-        dropperEnemy = Enemy(position: CGPoint(x: player.position.x - 100, y: size.height / 1.5), size: CGSize(width: 40, height: 40))
-        dropperEnemy.color = #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1)
-        dropperEnemy.physicsBody!.isDynamic = false
-        addChild(dropperEnemy)
+
         //    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
         //    entityManager.add(monster)
         
+
+//        timeLabel = SKLabelNode(fontNamed: "Courier")
+//        timeLabel.position = CGPoint(x: 0, y: size.height / 5)
+//        cam.addChild(timeLabel)
+
+
+        
+//        // Setup joystick to control player movement.
+//        movePlayerStick.position = CGPoint(x: -size.width / 2 + movePlayerStick.radius * 1.6, y: -size.height / 2 + movePlayerStick.radius * 1.5)
+//        movePlayerStick.stick.color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.5)
+//        movePlayerStick.substrate.color = #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.3)
+//        movePlayerStick.trackingHandler = { [unowned self] data in
+//            //      self.player.physicsBody?.applyImpulse(CGVector(dx: data.velocity.x * 0.1, dy: 0))
+//            self.player.physicsBody?.applyForce(CGVector(dx: data.velocity.x * 5, dy: 0))
+//        }
+//        cam.addChild(movePlayerStick)
+
+        
+//        let timeAction = SKAction.run { [unowned self] in
+//            self.time += Double(self.physicsWorld.speed / 100)
+//            self.timeLabel.text = String(format: "%.2f", self.time)
+//        }
+//
+//
+//        run(SKAction.repeatForever(SKAction.sequence([timeAction, .wait(forDuration: 0.01)])))
+        
+
+    }
+    
+    func setupGround() {
+        ground = Ground(position: CGPoint(x: size.width / 2, y: 0), size: CGSize(width: size.width * 1000, height: size.height / 4))
+        addChild(ground)
+    }
+    
+    func setupPlayer() {
+        let playerHeight: CGFloat = 100
+        player = Player(position: CGPoint(x: size.width / 2, y: size.height / 2), size: CGSize(width: playerHeight/2.0, height: playerHeight))
+        addChild(player)
+    }
+    
+    func setupEnemy() {
+        enemy = Enemy(position: CGPoint(x: player.position.x - 100, y: size.height / 2), size: CGSize(width: 40, height: 80))
+        addChild(enemy)
+    }
+    
+    func setupJoystickControl() {
+        /* Setup joystick to control player movement */
+        movePlayerStick.position = CGPoint(x: -size.width / 2 + movePlayerStick.radius * 1.6, y: -size.height / 2 + movePlayerStick.radius * 1.5)
+        movePlayerStick.stick.color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.5)
+        movePlayerStick.substrate.color = #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.3)
+        movePlayerStick.trackingHandler = { [unowned self] data in
+            //      self.player.physicsBody?.applyImpulse(CGVector(dx: data.velocity.x * 0.1, dy: 0))
+            self.player.physicsBody?.applyForce(CGVector(dx: data.velocity.x * 5, dy: 0))
+        }
+        cam.addChild(movePlayerStick)
+    }
+    
+    func setupDropperEnemy() {
+        /* Once this function is called, the dropper enemy and its action will be created */
+        
+        /* Dropper Enemy */
+        dropperEnemy = Enemy(position: CGPoint(x: player.position.x - 100, y: size.height / 1.5), size: CGSize(width: 60, height: 60))
+        dropperEnemy.color = #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1)
+        dropperEnemy.physicsBody!.isDynamic = false
+        addChild(dropperEnemy)
+        
+        /* Dropper Enemy's actions */
         let dropObstacle = SKAction.run { [unowned self] in
             self.dropperEnemy.run(SKAction.scale(to: 2, duration: 0.2))
             var randWidthModifier = GKRandomSource.sharedRandom().nextInt(upperBound: 100)
-            var randHeightModifier = GKRandomSource.sharedRandom().nextInt(upperBound: 20)
-            var randVelocityModifier = CGFloat(GKRandomSource.sharedRandom().nextUniform()) + 1
+            let randHeightModifier = GKRandomSource.sharedRandom().nextInt(upperBound: 20)
+            let randVelocityModifier = CGFloat(GKRandomSource.sharedRandom().nextUniform()) + 1
             
             let isSuperBlock = randWidthModifier == 100 && randHeightModifier == 20
             if isSuperBlock {
@@ -101,12 +206,21 @@ class GameScene: SKScene {
         }
         
         run(SKAction.repeatForever(SKAction.sequence([dropObstacle, shrinkAfterDrop, .wait(forDuration: 2)])))
+    }
+    
+    func setupGameLabels() {
+        /* Coin Collection Label */
+        coinCollectionLabel = SKLabelNode()
+        coinCollectionLabel.fontSize = 30
+        coinCollectionLabel.fontColor = .yellow
+        coinCollectionLabel.verticalAlignmentMode = .top
+        coinCollectionLabel.horizontalAlignmentMode = .right
+        coinCollectionLabel.position = CGPoint(x: size.width / 2 - 70, y: size.height/2 - 10)
+        coinCollectionLabel.text = "Coins: 0"
+        /* Add CoinCollectionLabel as a child of cam */
+        cam.addChild(coinCollectionLabel)
         
-        addGroundObstacles()
-        cam = SKCameraNode()
-        timeLabel = SKLabelNode(fontNamed: "Courier")
-        timeLabel.position = CGPoint(x: 0, y: size.height / 5)
-        
+        /* Restart Button Label */
         restartButton = SKSpriteNode(color: #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 0.48), size: CGSize(width: 88, height: 44))
         restartButton.name = "restartButton"
         restartButton.position = CGPoint(x: -size.width / 2 + restartButton.frame.width, y: size.height / 2 - restartButton.frame.height)
@@ -117,45 +231,31 @@ class GameScene: SKScene {
         restartButtonLabel.fontSize = 20
         restartButtonLabel.position.x = restartButton.position.x
         restartButtonLabel.position.y = restartButton.position.y - 10
-        
-        
-        cam.addChild(timeLabel)
+        /* Add restart button and label as a child node of cam */
         cam.addChild(restartButton)
         cam.addChild(restartButtonLabel)
-        cam.setScale(3.5)
         
-        // Setup joystick to control player movement.
-        movePlayerStick.position = CGPoint(x: -size.width / 2 + movePlayerStick.radius * 1.6, y: -size.height / 2 + movePlayerStick.radius * 1.5)
-        movePlayerStick.stick.color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.5)
-        movePlayerStick.substrate.color = #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.3)
-        movePlayerStick.trackingHandler = { [unowned self] data in
-            //      self.player.physicsBody?.applyImpulse(CGVector(dx: data.velocity.x * 0.1, dy: 0))
-            self.player.physicsBody?.applyForce(CGVector(dx: data.velocity.x * 2, dy: 0))
-        }
-        cam.addChild(movePlayerStick)
-        physicsWorld.contactDelegate = self
+        /* Time Label */
+        timeLabel = SKLabelNode(fontNamed: "Courier")
+        timeLabel.position = CGPoint(x: 0, y: size.height / 5)
         
-        self.camera = cam
+        cam.addChild(timeLabel)
         
-        addChild(cam!)
+        /* Time Action */
         let timeAction = SKAction.run { [unowned self] in
             self.time += Double(self.physicsWorld.speed / 100)
             self.timeLabel.text = String(format: "%.2f", self.time)
         }
-        
-        
         run(SKAction.repeatForever(SKAction.sequence([timeAction, .wait(forDuration: 0.01)])))
-        
-        
-        startMakingCoins()
-        
     }
+    
     
     override func update(_ currentTime: TimeInterval) {
         let deltaTime = currentTime - lastUpdateTimeInterval
         lastUpdateTimeInterval = currentTime
         
         super.update(currentTime)
+        
         // Make sure that the scene has already loaded.
         guard scene != nil else { return }
         guard let cam = cam else { return }
@@ -191,7 +291,7 @@ class GameScene: SKScene {
         if touchLocation.x > cam.frame.width / 2 && !isPlayerJumping {
             guard let playerPhysicsBody = player.physicsBody else { return }
             print("Testing????")
-            playerPhysicsBody.applyImpulse(CGVector(dx: 0, dy: 60))
+            playerPhysicsBody.applyImpulse(CGVector(dx: 0, dy: 500))
             isPlayerJumping = true
         }
         
@@ -205,7 +305,7 @@ class GameScene: SKScene {
             }
         }
         
-        //    movePlayerStick.position = touchLocation
+        // movePlayerStick.position = touchLocation
         touchDown = true
     }
     
@@ -214,174 +314,8 @@ class GameScene: SKScene {
     }
 }
 
-extension GameScene {
-    
-    //    // MARK: Create Coin
-    //    func getCoin() -> SKSpriteNode {
-    //        let coin = SKSpriteNode(color: UIColor.yellow, size: coinSize)
-    //        coin.name = "coin"
-    //        return coin
-    //    }
-    //
-    //    func makeCoin() -> SKSpriteNode {
-    //        let coin = getCoin()
-    //
-    //        coin.position.x = view!.frame.size.width
-    //        coin.position.y = CGFloat(arc4random() % 14) * coinSize.width + 100
-    //
-    //        coin.physicsBody = SKPhysicsBody(rectangleOf: coin.size)
-    //        coin.physicsBody?.affectedByGravity = false
-    //        coin.physicsBody?.isDynamic = false
-    //
-    //        // Coins collide with nothing and contact only with players.
-    //        coin.physicsBody?.categoryBitMask   = PhysicsCategory.coin
-    //        coin.physicsBody?.collisionBitMask  = PhysicsCategory.none
-    //        coin.physicsBody?.contactTestBitMask = PhysicsCategory.player
-    //
-    //        return coin
-    //    }
-    //
-    //    // MARK: Make coins
-    //
-    //    func startMakingCoins() {
-    //        // MARK: Make Coins
-    //        let makeCoin = SKAction.run {
-    //            self.makeCoin()
-    //        }
-    //
-    //        let coinDelay = SKAction.wait(forDuration: 2)
-    //        let coinSequence = SKAction.sequence([coinDelay, makeCoin])
-    //        let repeatCoins = SKAction.repeatForever(coinSequence)
-    //        run(repeatCoins)
-    //    }
-    //
-}
 
-private extension GameScene {
-    func createBackground() {
-        for i in 0...1000 {
-            let node = SKSpriteNode(color: #colorLiteral(red: 0.8276178896, green: 0.4138089448, blue: 0, alpha: 1), size: CGSize(width: size.width * 0.9, height: size.height * 0.95))
-            node.position = CGPoint(x: CGFloat(i) * node.frame.width + 50, y: node.frame.height)
-            addChild(node)
-        }
-    }
-    
-    func addGroundObstacles() {
-        makeObstacles(at: player.position, amount: 1000, size: CGSize(width: 50, height: 50), spacing: 1)
-        makeObstacles(at: player.position.applying(CGAffineTransform(translationX: 0, y: 50)), amount: 250, size: CGSize(width: 50, height: 120), spacing: 2)
-        makeObstacles(at: player.position.applying(CGAffineTransform(translationX: 3100, y: 100)), amount: 250, size: CGSize(width: 3000, height: 120), spacing: 1.1)
-    }
-    
-    func makeObstacles(at origin: CGPoint, amount: Int, size: CGSize, spacing: CGFloat) {
-        for i in 0...amount {
-            let obstacleSize = CGSize(width: size.width + CGFloat(i), height: size.height + CGFloat(i))
-            let obstaclePosition = CGPoint(x: origin.x + CGFloat(obstacleSize.width * CGFloat(i) * spacing), y: origin.y)
-            
-            let obstacle = Obstacle(position: obstaclePosition, size: obstacleSize)
-            addChild(obstacle)
-        }
-    }
-    
-//    func makeCoinBlock(at origin: CGPoint, amount: Int, at position: CGFloat) -> SKNode {
-//       // var randomCoins =
-//    }
-    
-    func applyGravityMultipliers(to physicsBody: SKPhysicsBody) {
-        if physicsBody.velocity.dy < 0 {
-            physicsBody.applyImpulse(CGVector(dx: 0, dy: physicsWorld.gravity.dy * (fallMultiplier - 1)))
-        } else if physicsBody.velocity.dy > 0 && !touchDown {
-            physicsBody.applyImpulse(CGVector(dx: 0, dy: physicsWorld.gravity.dy * (lowJumpMultiplier - 1)))
-        }
-    }
-}
 
-extension GameScene: SKPhysicsContactDelegate {
-    
-    func didBegin(_ contact: SKPhysicsContact) {
-        //guard let playerPhysicsBody = player.physicsBody else { return }
-        
-        let bodyA = contact.bodyA
-        let bodyB = contact.bodyB
-        let nodeA = bodyA.node
-        let nodeB = bodyB.node
-        
-        let objectCategory = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        
-        switch objectCategory {
-            
-        case PhysicsCategory.player | PhysicsCategory.obstacles:
-            isPlayerJumping = false
-            print("player is jumping over an obstacle")
-            
-        case PhysicsCategory.player | PhysicsCategory.enemy:
-            isPlayerJumping = false
-            print("player is jumping away from the enemy")
-            
-        case PhysicsCategory.player | PhysicsCategory.ground:
-            isPlayerJumping = false
-            print("player is jumping from the ground")
-            
-        case PhysicsCategory.player | PhysicsCategory.coin:
-            
-            // bodyA might be coin if not must be bodyB
-            if bodyA.categoryBitMask == PhysicsCategory.coin {
-                nodeA?.removeFromParent()
-                print("Player collects coin. NodeA removed coins from parent.")
-            } else {
-                nodeB?.removeFromParent()
-                print("Player collects coin. NodeB removed coins from parent.")
-            }
-            
-        default:
-            return
-        }
-    }
-    
-    
-    
-    
-    
-//    func didBegin(_ contact: SKPhysicsContact) {
-//        guard let playerPhysicsBody = player.physicsBody else { return }
-//        //guard let coinPhysicsBody = coin.physicsBody else { return }
-//
-//        //let contact = contact.bodyA.contactTestBitMask | contact.bodyB.contactTestBitMask
-//        let bodyA = contact.bodyA
-//        let bodyB = contact.bodyB
-//        let nodeA = bodyA.node
-//        let nodeB = bodyB.node
-//
-//
-//        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-//
-////        print(collision, PhysicsCategory.player | PhysicsCategory.coin)
-//
-//        switch collision {
-//
-////        case PhysicsCategory.player | PhysicsCategory.ground:
-////            isPlayerJumping = false
-//        case playerPhysicsBody.contactTestBitMask:
-//            print("The player is jumping")
-//            isPlayerJumping = false
-//
-//
-//        case PhysicsCategory.player | PhysicsCategory.coin:
-////            print("player collected the coins")
-//            // remove this coin
-//            // check if bodyA is a or bodyB is the coin
-//            // bodyAorB.node.removeFromParetn()
-//
-//            if bodyA.categoryBitMask == PhysicsCategory.coin {
-//                nodeA?.removeFromParent()
-//            } else {
-//                nodeB?.removeFromParent()
-//            }
-//
-//        default:
-//            return
-//        }
-//    }
-}
 
 
 

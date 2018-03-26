@@ -15,7 +15,7 @@ class Coin: SKSpriteNode {
         let coinSize = CGSize(width: 20, height: 20)
         super.init(texture: nil, color: .yellow, size: coinSize)
         
-        self.name = GameConstants.StringConstants.coinName
+        self.name = GameConstant.StringConstant.coinName
         
         setupPhysics()
     }
@@ -31,9 +31,9 @@ class Coin: SKSpriteNode {
         self.physicsBody?.affectedByGravity = false
         // self.physicsBody?.isDynamic = false
         
-        self.physicsBody?.categoryBitMask = PhysicsCategory.coin
-        self.physicsBody?.collisionBitMask = PhysicsCategory.none
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.player
+        self.physicsBody?.categoryBitMask = PhysicsCategory.coin.bitMask
+        self.physicsBody?.collisionBitMask = PhysicsCategory.none.bitMask
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.player.bitMask
     }
     
 }

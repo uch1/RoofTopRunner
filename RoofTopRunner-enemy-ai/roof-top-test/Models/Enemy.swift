@@ -18,15 +18,15 @@ class Enemy: SKSpriteNode {
     init(position: CGPoint, size: CGSize) {
         super.init(texture: nil, color: #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1), size: size)
         self.position = position
-        name = "enemy"
+        name = GameConstant.StringConstant.enemyName
         
         physicsBody = SKPhysicsBody(rectangleOf: size)
         if let physicsBody = physicsBody {
             physicsBody.affectedByGravity = true
             
-            physicsBody.categoryBitMask = PhysicsCategory.enemy
-            physicsBody.collisionBitMask = PhysicsCategory.ground | PhysicsCategory.player | PhysicsCategory.obstacles | PhysicsCategory.enemy
-            physicsBody.contactTestBitMask = PhysicsCategory.none
+            physicsBody.categoryBitMask = PhysicsCategory.enemy.bitMask
+            physicsBody.collisionBitMask = PhysicsCategory.ground.bitMask | PhysicsCategory.player.bitMask | PhysicsCategory.obstacle.bitMask | PhysicsCategory.enemy.bitMask
+            physicsBody.contactTestBitMask = PhysicsCategory.none.bitMask
             
             physicsBody.usesPreciseCollisionDetection = true
         }

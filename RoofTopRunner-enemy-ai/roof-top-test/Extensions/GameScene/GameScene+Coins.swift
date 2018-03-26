@@ -29,7 +29,7 @@ extension GameScene {
         // MARK: Make Coins
         let makeCoin = SKAction.run {
             print("Make Coins!")
-            self.makeCoinBlock(node: self, posX: self.player.position.x)
+            self.makeCoinBlock(node: self, posX: self.player.position.x + 1000)
         }
         
         let coinDelay = SKAction.wait(forDuration: 2)
@@ -55,9 +55,9 @@ extension GameScene {
         coin.physicsBody?.isDynamic = false
         
         // Coins collide with nothing and contact only with players.
-        coin.physicsBody?.categoryBitMask   = PhysicsCategory.coin
-        coin.physicsBody?.collisionBitMask  = PhysicsCategory.none
-        coin.physicsBody?.contactTestBitMask = PhysicsCategory.player
+        coin.physicsBody?.categoryBitMask   = PhysicsCategory.coin.bitMask
+        coin.physicsBody?.collisionBitMask  = PhysicsCategory.none.bitMask
+        coin.physicsBody?.contactTestBitMask = PhysicsCategory.player.bitMask
         
         return coin
     }

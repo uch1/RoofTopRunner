@@ -11,8 +11,7 @@ import SpriteKit
 class Ground: SKSpriteNode {
     init(position: CGPoint, size: CGSize) {
         super.init(texture: nil, color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), size: size)
-        name = "ground"
-        
+        name = GameConstant.StringConstant.groundName
         self.position = position
         physicsBody = SKPhysicsBody(rectangleOf: size)
         if let physicsBody = physicsBody {
@@ -20,9 +19,9 @@ class Ground: SKSpriteNode {
             physicsBody.isDynamic = false
             
             
-            physicsBody.categoryBitMask = PhysicsCategory.ground
-            physicsBody.contactTestBitMask = PhysicsCategory.player
-            physicsBody.collisionBitMask = PhysicsCategory.player | PhysicsCategory.obstacles | PhysicsCategory.enemy
+            physicsBody.categoryBitMask = PhysicsCategory.ground.bitMask
+            physicsBody.contactTestBitMask = PhysicsCategory.player.bitMask
+            physicsBody.collisionBitMask = PhysicsCategory.player.bitMask | PhysicsCategory.obstacle.bitMask | PhysicsCategory.enemy.bitMask
         }
     }
     
