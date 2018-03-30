@@ -49,14 +49,26 @@ class GameScene: SKScene {
     var restartButton: SKSpriteNode!
     var restartButtonLabel: SKLabelNode!
     var coinCollectionLabel: SKLabelNode!
+    var healthBarLabel: SKLabelNode!
     var healthBar: SKSpriteNode!
+    var state: GameState = .title
     
-    var health: CGFloat = 1.0 {
+    var health: Int = 100 {
         didSet {
             /* Cap health */
-            if health > 1.0 { health = 1.0}
+            if health > 100 {
+                healthBarLabel.text = "Health:\(health)%"
+            }
+            
+            if health <= 0 {
+                health = 0
+                gameOver()
+            }
+            
+            healthBarLabel.text = "Health: \(health)%"
+            //gameOver()
             /* Scale health bar between 0.0 -> 1.0 e.g 0 -> 100% */
-            healthBar.xScale = health
+//            healthBar.xScale = CGFloat((health / 100))
         }
     }
     
@@ -66,10 +78,29 @@ class GameScene: SKScene {
         }
     }
     
-    
-//    // Size of node
-//    let coinSize = CGSize(width: 20, height: 20)
-    
+    func gameOver() {
+        /* Game Over! */
+        state = .gameOver
+        
+        /* Make the player turn red */
+        player.run(SKAction.colorize(with: .red, colorBlendFactor: 1.0, duration: 1.0))
+        player.physicsBody?.allowsRotation = true
+        player.zRotation = 90.0
+        
+        /* Grab reference to the SpriteKit view */
+        let skView = self.view as SKView!
+        
+        /* Load GameScene */
+        let scene = GameScene(size: view!.bounds.size)
+        // guard let scene = GameScene(fileNamed: "GameScene") as GameScene! else { return }
+        print(">>>>> Loading Game Scene after game over!!!!!!!!")
+        /* Ensure correct aspect mode */
+        scene.scaleMode = .aspectFill
+        
+        /* Restart GameScene */
+        skView?.presentScene(scene)
+    }
+  
     override func didMove(to view: SKView) {
         
         physicsWorld.contactDelegate = self
@@ -91,51 +122,6 @@ class GameScene: SKScene {
         
         entityManager = EntityManager(scene: self)
         
-//        ground = Ground(position: CGPoint(x: size.width / 2, y: 0), size: CGSize(width: size.width * 1000, height: size.height / 4))
-//        addChild(ground)
-        
-//        let playerHeight: CGFloat = 100
-//        player = Player(position: CGPoint(x: size.width / 2, y: size.height / 2), size: CGSize(width: playerHeight/2.0, height: playerHeight))
-//        addChild(player)
-        
-//        enemy = Enemy(position: CGPoint(x: player.position.x - 100, y: size.height / 2), size: CGSize(width: 40, height: 80))
-//        addChild(enemy)
-        
-//        coin = Coin()
-//        coin.position = CGPoint(x: 250, y: 300)
-//        addChild(<#T##node: SKNode##SKNode#>)
-        
-
-        //    monster = Monster(position: CGPoint(x: player.position.x - 100, y: size.height), color: #colorLiteral(red: 1, green: 0.8337777597, blue: 0, alpha: 1), size: CGSize(width: 40, height: 40), entityManager: entityManager)
-        //    entityManager.add(monster)
-        
-
-//        timeLabel = SKLabelNode(fontNamed: "Courier")
-//        timeLabel.position = CGPoint(x: 0, y: size.height / 5)
-//        cam.addChild(timeLabel)
-
-
-        
-//        // Setup joystick to control player movement.
-//        movePlayerStick.position = CGPoint(x: -size.width / 2 + movePlayerStick.radius * 1.6, y: -size.height / 2 + movePlayerStick.radius * 1.5)
-//        movePlayerStick.stick.color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.5)
-//        movePlayerStick.substrate.color = #colorLiteral(red: 0.6722276476, green: 0.6722276476, blue: 0.6722276476, alpha: 0.3)
-//        movePlayerStick.trackingHandler = { [unowned self] data in
-//            //      self.player.physicsBody?.applyImpulse(CGVector(dx: data.velocity.x * 0.1, dy: 0))
-//            self.player.physicsBody?.applyForce(CGVector(dx: data.velocity.x * 5, dy: 0))
-//        }
-//        cam.addChild(movePlayerStick)
-
-        
-//        let timeAction = SKAction.run { [unowned self] in
-//            self.time += Double(self.physicsWorld.speed / 100)
-//            self.timeLabel.text = String(format: "%.2f", self.time)
-//        }
-//
-//
-//        run(SKAction.repeatForever(SKAction.sequence([timeAction, .wait(forDuration: 0.01)])))
-        
-
     }
     
     func setupGround() {
@@ -194,6 +180,8 @@ class GameScene: SKScene {
             obstacle.color = #colorLiteral(red: 0.8765190972, green: 0.5600395258, blue: 0, alpha: 1)
             self.addChild(obstacle)
             
+            
+            
             let difference = Useful.differenceBetween(obstacle, and: self.player)
             let angle = atan2(difference.y, difference.x)
             obstacle.physicsBody!.usesPreciseCollisionDetection = true
@@ -209,14 +197,28 @@ class GameScene: SKScene {
     }
     
     func setupGameLabels() {
+        /* Health Bar Label */
+        healthBarLabel = SKLabelNode()
+        healthBarLabel.fontSize = 30
+        healthBarLabel.fontColor = .red
+        healthBarLabel.fontName = "Futura"
+        healthBarLabel.verticalAlignmentMode = .top
+        healthBarLabel.horizontalAlignmentMode = .right
+        healthBarLabel.position = CGPoint(x: size.width / 2 - 145, y: size.height/2 - 10)
+        healthBarLabel.text = "Health: 100%"
+        healthBarLabel.zPosition = GameConstant.ZPosition.healthBarZ
+        cam.addChild(healthBarLabel)
+        
         /* Coin Collection Label */
         coinCollectionLabel = SKLabelNode()
         coinCollectionLabel.fontSize = 30
         coinCollectionLabel.fontColor = .yellow
+        coinCollectionLabel.fontName = "Futura"
         coinCollectionLabel.verticalAlignmentMode = .top
         coinCollectionLabel.horizontalAlignmentMode = .right
-        coinCollectionLabel.position = CGPoint(x: size.width / 2 - 70, y: size.height/2 - 10)
+        coinCollectionLabel.position = CGPoint(x: size.width / 2 - 10 , y: size.height/2 - 10)
         coinCollectionLabel.text = "Coins: 0"
+        coinCollectionLabel.zPosition = GameConstant.ZPosition.coinZ
         /* Add CoinCollectionLabel as a child of cam */
         cam.addChild(coinCollectionLabel)
         

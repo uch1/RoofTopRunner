@@ -23,16 +23,21 @@ extension GameScene: SKPhysicsContactDelegate {
         switch objectCategory {
             
         case PhysicsCategory.player.bitMask | PhysicsCategory.obstacle.bitMask:
+            
             isPlayerJumping = false
-            print("player is jumping over an obstacle")
+            if state != .gameOver {
+                health -= 5
+            }
+            print("The fallen obstacle hit the player. Player's Health: \(health)")
+    
             
         case PhysicsCategory.player.bitMask | PhysicsCategory.enemy.bitMask:
             isPlayerJumping = false
-            print("player is jumping away from the enemy")
+            //print("player is jumping away from the enemy")
             
         case PhysicsCategory.player.bitMask | PhysicsCategory.ground.bitMask:
             isPlayerJumping = false
-            print("player is jumping from the ground")
+            //print("player is jumping from the ground")
             
         case PhysicsCategory.player.bitMask | PhysicsCategory.coin.bitMask:
             coinsCollected += 1
@@ -49,4 +54,6 @@ extension GameScene: SKPhysicsContactDelegate {
             return
         }
     }
+    
+    
 }

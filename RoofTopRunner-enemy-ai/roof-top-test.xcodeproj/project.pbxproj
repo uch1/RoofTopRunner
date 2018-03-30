@@ -29,7 +29,7 @@
 		804C7CD32068872A001795E0 /* GameScene+BackgroundObstacles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804C7CD22068872A001795E0 /* GameScene+BackgroundObstacles.swift */; };
 		806D5E48206013A800DB0A72 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806D5E47206013A800DB0A72 /* Coin.swift */; };
 		806D5E4A2060142D00DB0A72 /* ObjectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806D5E492060142D00DB0A72 /* ObjectHelper.swift */; };
-		80D3185020611D2400E87E62 /* GameConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D3184F20611D2400E87E62 /* GameConstants.swift */; };
+		80D3185020611D2400E87E62 /* GameConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D3184F20611D2400E87E62 /* GameConstant.swift */; };
 		80D3185220611D7400E87E62 /* PhysicsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D3185120611D7400E87E62 /* PhysicsHelper.swift */; };
 		80D318562061C3D100E87E62 /* GameScene+Coins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D318552061C3D100E87E62 /* GameScene+Coins.swift */; };
 		80D3185B2065C3A200E87E62 /* GameScene+PhysicsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D3185A2065C3A200E87E62 /* GameScene+PhysicsDelegate.swift */; };
@@ -60,7 +60,7 @@
 		804C7CD22068872A001795E0 /* GameScene+BackgroundObstacles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+BackgroundObstacles.swift"; sourceTree = "<group>"; };
 		806D5E47206013A800DB0A72 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		806D5E492060142D00DB0A72 /* ObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectHelper.swift; sourceTree = "<group>"; };
-		80D3184F20611D2400E87E62 /* GameConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConstants.swift; sourceTree = "<group>"; };
+		80D3184F20611D2400E87E62 /* GameConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConstant.swift; sourceTree = "<group>"; };
 		80D3185120611D7400E87E62 /* PhysicsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsHelper.swift; sourceTree = "<group>"; };
 		80D318552061C3D100E87E62 /* GameScene+Coins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+Coins.swift"; sourceTree = "<group>"; };
 		80D3185A2065C3A200E87E62 /* GameScene+PhysicsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+PhysicsDelegate.swift"; sourceTree = "<group>"; };
@@ -141,7 +141,7 @@
 				3DA7C5C02051FC9E005C60B9 /* LaunchScreen.storyboard */,
 				3DA7C5C32051FC9E005C60B9 /* Info.plist */,
 				3DA7C5CE2051FFA0005C60B9 /* PhysicsCategories.swift */,
-				80D3184F20611D2400E87E62 /* GameConstants.swift */,
+				80D3184F20611D2400E87E62 /* GameConstant.swift */,
 			);
 			path = "roof-top-test";
 			sourceTree = "<group>";
@@ -272,7 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D4D46902058765B00747B26 /* Enemy.swift in Sources */,
-				80D3185020611D2400E87E62 /* GameConstants.swift in Sources */,
+				80D3185020611D2400E87E62 /* GameConstant.swift in Sources */,
 				3DEBB396205B02010017C9BB /* AnalogJoystick.swift in Sources */,
 				3D28C25A205CF1700058771E /* SpriteComponent.swift in Sources */,
 				3D55FDE6205B7DB70059FC92 /* Obstacle.swift in Sources */,

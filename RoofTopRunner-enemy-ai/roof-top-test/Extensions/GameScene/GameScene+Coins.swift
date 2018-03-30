@@ -39,6 +39,7 @@ extension GameScene {
     }
     
     func getCoin() -> SKSpriteNode {
+        let coinSize = CGSize(width: 21, height: 21)
         let coin = SKSpriteNode(color: UIColor.yellow, size: coinSize)
         coin.name = "coin"
         return coin
@@ -47,6 +48,7 @@ extension GameScene {
     func makeCoin() -> SKSpriteNode {
         let coin = getCoin()
         
+        let coinSize = CGSize(width: 21, height: 0)
         coin.position.x = view!.frame.size.width
         coin.position.y = CGFloat(arc4random() % 14) * coinSize.width + 100
         
