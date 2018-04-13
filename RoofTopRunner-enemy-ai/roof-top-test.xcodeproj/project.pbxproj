@@ -26,13 +26,18 @@
 		3DA7C5CD2051FE77005C60B9 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA7C5CC2051FE77005C60B9 /* Player.swift */; };
 		3DA7C5CF2051FFA0005C60B9 /* PhysicsCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA7C5CE2051FFA0005C60B9 /* PhysicsCategories.swift */; };
 		3DEBB396205B02010017C9BB /* AnalogJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEBB395205B02010017C9BB /* AnalogJoystick.swift */; };
+		800BD92D207FF778002CC3A4 /* HealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800BD92C207FF778002CC3A4 /* HealthBar.swift */; };
 		804C7CD32068872A001795E0 /* GameScene+BackgroundObstacles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804C7CD22068872A001795E0 /* GameScene+BackgroundObstacles.swift */; };
 		806D5E48206013A800DB0A72 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806D5E47206013A800DB0A72 /* Coin.swift */; };
 		806D5E4A2060142D00DB0A72 /* ObjectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806D5E492060142D00DB0A72 /* ObjectHelper.swift */; };
-		80D3185020611D2400E87E62 /* GameConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D3184F20611D2400E87E62 /* GameConstant.swift */; };
 		80D3185220611D7400E87E62 /* PhysicsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D3185120611D7400E87E62 /* PhysicsHelper.swift */; };
 		80D318562061C3D100E87E62 /* GameScene+Coins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D318552061C3D100E87E62 /* GameScene+Coins.swift */; };
 		80D3185B2065C3A200E87E62 /* GameScene+PhysicsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D3185A2065C3A200E87E62 /* GameScene+PhysicsDelegate.swift */; };
+		80D98235206EB5E00008B7C7 /* GameConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D98234206EB5E00008B7C7 /* GameConstant.swift */; };
+		80E0F1AA207F21320047FB64 /* MyScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 80E0F1A9207F21320047FB64 /* MyScene.sks */; };
+		80FB17292072EFA40063A77D /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FB17282072EFA40063A77D /* MenuScene.swift */; };
+		80FB172F2072F1AB0063A77D /* SceneManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FB172E2072F1AB0063A77D /* SceneManagerDelegate.swift */; };
+		80FB173120730C510063A77D /* MSButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FB173020730C510063A77D /* MSButtonNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,13 +62,18 @@
 		3DA7C5CC2051FE77005C60B9 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		3DA7C5CE2051FFA0005C60B9 /* PhysicsCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategories.swift; sourceTree = "<group>"; };
 		3DEBB395205B02010017C9BB /* AnalogJoystick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalogJoystick.swift; sourceTree = "<group>"; };
+		800BD92C207FF778002CC3A4 /* HealthBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthBar.swift; sourceTree = "<group>"; };
 		804C7CD22068872A001795E0 /* GameScene+BackgroundObstacles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+BackgroundObstacles.swift"; sourceTree = "<group>"; };
 		806D5E47206013A800DB0A72 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		806D5E492060142D00DB0A72 /* ObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectHelper.swift; sourceTree = "<group>"; };
-		80D3184F20611D2400E87E62 /* GameConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConstant.swift; sourceTree = "<group>"; };
 		80D3185120611D7400E87E62 /* PhysicsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsHelper.swift; sourceTree = "<group>"; };
 		80D318552061C3D100E87E62 /* GameScene+Coins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+Coins.swift"; sourceTree = "<group>"; };
 		80D3185A2065C3A200E87E62 /* GameScene+PhysicsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+PhysicsDelegate.swift"; sourceTree = "<group>"; };
+		80D98234206EB5E00008B7C7 /* GameConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConstant.swift; sourceTree = "<group>"; };
+		80E0F1A9207F21320047FB64 /* MyScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyScene.sks; sourceTree = "<group>"; };
+		80FB17282072EFA40063A77D /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		80FB172E2072F1AB0063A77D /* SceneManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManagerDelegate.swift; sourceTree = "<group>"; };
+		80FB173020730C510063A77D /* MSButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSButtonNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +114,7 @@
 				3D59A2E2205A60A5006CAB22 /* QuickMaths.swift */,
 				806D5E492060142D00DB0A72 /* ObjectHelper.swift */,
 				80D3185120611D7400E87E62 /* PhysicsHelper.swift */,
+				80FB173020730C510063A77D /* MSButtonNode.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -127,6 +138,10 @@
 		3DA7C5B02051FC9E005C60B9 /* roof-top-test */ = {
 			isa = PBXGroup;
 			children = (
+				80FB172D2072F17F0063A77D /* Protocols */,
+				80FB172A2072EFEA0063A77D /* Storyboards */,
+				3DA7C5CE2051FFA0005C60B9 /* PhysicsCategories.swift */,
+				80D98234206EB5E00008B7C7 /* GameConstant.swift */,
 				80D31859206474D200E87E62 /* States */,
 				80D318532061C12800E87E62 /* Extensions */,
 				80D318572064266000E87E62 /* Scenes */,
@@ -136,12 +151,9 @@
 				3D28C253205CF04B0058771E /* Entities */,
 				3D59A2E1205A60A5006CAB22 /* Helper */,
 				3DA7C5B12051FC9E005C60B9 /* AppDelegate.swift */,
-				3DA7C5BB2051FC9E005C60B9 /* Main.storyboard */,
 				3DA7C5BE2051FC9E005C60B9 /* Assets.xcassets */,
-				3DA7C5C02051FC9E005C60B9 /* LaunchScreen.storyboard */,
 				3DA7C5C32051FC9E005C60B9 /* Info.plist */,
-				3DA7C5CE2051FFA0005C60B9 /* PhysicsCategories.swift */,
-				80D3184F20611D2400E87E62 /* GameConstant.swift */,
+				80E0F1A9207F21320047FB64 /* MyScene.sks */,
 			);
 			path = "roof-top-test";
 			sourceTree = "<group>";
@@ -149,8 +161,9 @@
 		3DA7C5C92051FE64005C60B9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				3DA7C5CA2051FE71005C60B9 /* Ground.swift */,
+				800BD92C207FF778002CC3A4 /* HealthBar.swift */,
 				3DA7C5CC2051FE77005C60B9 /* Player.swift */,
+				3DA7C5CA2051FE71005C60B9 /* Ground.swift */,
 				3D4D468F2058765B00747B26 /* Enemy.swift */,
 				3D55FDE5205B7DB70059FC92 /* Obstacle.swift */,
 				806D5E47206013A800DB0A72 /* Coin.swift */,
@@ -180,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				3DA7C5B72051FC9E005C60B9 /* GameScene.swift */,
+				80FB17282072EFA40063A77D /* MenuScene.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -197,6 +211,23 @@
 			children = (
 			);
 			path = States;
+			sourceTree = "<group>";
+		};
+		80FB172A2072EFEA0063A77D /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				3DA7C5C02051FC9E005C60B9 /* LaunchScreen.storyboard */,
+				3DA7C5BB2051FC9E005C60B9 /* Main.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		80FB172D2072F17F0063A77D /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				80FB172E2072F1AB0063A77D /* SceneManagerDelegate.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,6 +291,7 @@
 			files = (
 				3DA7C5BD2051FC9E005C60B9 /* Main.storyboard in Resources */,
 				3DA7C5BF2051FC9E005C60B9 /* Assets.xcassets in Resources */,
+				80E0F1AA207F21320047FB64 /* MyScene.sks in Resources */,
 				3DA7C5C22051FC9E005C60B9 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -272,7 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D4D46902058765B00747B26 /* Enemy.swift in Sources */,
-				80D3185020611D2400E87E62 /* GameConstant.swift in Sources */,
+				800BD92D207FF778002CC3A4 /* HealthBar.swift in Sources */,
 				3DEBB396205B02010017C9BB /* AnalogJoystick.swift in Sources */,
 				3D28C25A205CF1700058771E /* SpriteComponent.swift in Sources */,
 				3D55FDE6205B7DB70059FC92 /* Obstacle.swift in Sources */,
@@ -280,6 +312,7 @@
 				3DA7C5B82051FC9E005C60B9 /* GameScene.swift in Sources */,
 				3D28C256205CF0A20058771E /* Monster.swift in Sources */,
 				3DA7C5CF2051FFA0005C60B9 /* PhysicsCategories.swift in Sources */,
+				80D98235206EB5E00008B7C7 /* GameConstant.swift in Sources */,
 				3DA7C5BA2051FC9E005C60B9 /* GameViewController.swift in Sources */,
 				804C7CD32068872A001795E0 /* GameScene+BackgroundObstacles.swift in Sources */,
 				80D3185220611D7400E87E62 /* PhysicsHelper.swift in Sources */,
@@ -292,8 +325,11 @@
 				3DA7C5CD2051FE77005C60B9 /* Player.swift in Sources */,
 				3DA7C5B22051FC9E005C60B9 /* AppDelegate.swift in Sources */,
 				80D3185B2065C3A200E87E62 /* GameScene+PhysicsDelegate.swift in Sources */,
+				80FB17292072EFA40063A77D /* MenuScene.swift in Sources */,
+				80FB172F2072F1AB0063A77D /* SceneManagerDelegate.swift in Sources */,
 				806D5E4A2060142D00DB0A72 /* ObjectHelper.swift in Sources */,
 				806D5E48206013A800DB0A72 /* Coin.swift in Sources */,
+				80FB173120730C510063A77D /* MSButtonNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
